@@ -7,18 +7,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.deanoj.nowon.R;
 import com.deanoj.nowon.data.dto.Channel;
+import com.deanoj.nowon.data.dto.TvListing;
 
 import java.util.List;
 
 /**
  * Created by deano on 03/01/15.
  */
-public class TvListingAdapter extends ArrayAdapter<Channel> {
+public class TvListingAdapter extends ArrayAdapter<TvListing> {
 
     private Context context;
 
-    public TvListingAdapter(Context context, int resource, int textViewResourceId, List<Channel> objects)
+    public TvListingAdapter(Context context, int resource, int textViewResourceId, List<TvListing> objects)
     {
         super(context, resource, textViewResourceId, objects);
 
@@ -31,24 +33,33 @@ public class TvListingAdapter extends ArrayAdapter<Channel> {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(android.R.layout.simple_list_item_2, null);
+            view = inflater.inflate(R.layout.listing_row, null);
         }
 
-        Channel channel = getItem(position);
+        TvListing listing = getItem(position);
 
-        if (channel != null) {
-            TextView displayNameView = (TextView) view
-                    .findViewById(android.R.id.text1);
+        if (listing != null) {
+            TextView title = (TextView) view
+                    .findViewById(R.id.title);
 
-            TextView nowOnView = (TextView) view
-                    .findViewById(android.R.id.text2);
+            TextView description = (TextView) view
+                    .findViewById(R.id.description);
 
-            if (displayNameView != null) {
-                displayNameView.setText(channel.getDisplayName());
+            TextView startTime = (TextView) view
+                    .findViewById(R.id.start_time);
+
+            if (title != null) {
+                title.setText(listing.getTitle());
             }
-            if (nowOnView != null) {
-                nowOnView.setText(channel.getTvListings().get(0).getTitle());
+
+            if (description != null) {
+                description.setText(listing.getDescription());
             }
+
+            if (startTime != null) {
+                startTime.setText(listing.getFormattedStartTime());
+            }
+
         }
 
         return view;

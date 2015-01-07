@@ -1,21 +1,52 @@
 package com.deanoj.nowon;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.deanoj.nowon.data.ChannelAdapter;
+import com.deanoj.nowon.data.ResponseParser;
+import com.deanoj.nowon.data.TvListingAdapter;
 
 
 public class ChannelActivity extends ActionBarActivity {
+
+    public static final String CHANNEL_POSITION = "position";
+
+    private ListView listView;
+
+    private TvListingAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
+
+        int position = 0;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            position = (int) extras.get(CHANNEL_POSITION);
+        }
+
+        listView = (ListView) findViewById(R.id.listViewTvListings);
+
+        ResponseParser parser = ResponseParser.getInstance();
+
+
+        adapter = new TvListingAdapter(this,
+                android.R.layout.simple_list_item_2, android.R.id.text1,
+                parser.getResults().getChannels().get(position).getTvListings());
+
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 
     @Override
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_channel, menu);
@@ -36,4 +67,6 @@ public class ChannelActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

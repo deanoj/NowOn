@@ -1,55 +1,92 @@
 package com.deanoj.nowon;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.deanoj.nowon.data.ChannelAdapter;
 import com.deanoj.nowon.data.Faker;
+import com.deanoj.nowon.data.NetworkSingleton;
+import com.deanoj.nowon.data.ResponseParser;
+import com.deanoj.nowon.data.dto.Channel;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Date;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    private TextView textView;
+    private static final String TAG = "MainActivity";
+
+    private ListView listView;
+
+    private ChannelAdapter adapter;
+
+    private List<Channel> channels;
+
+    private final Date startDate = new Date();
+
+    private int[] channelNumbers = {94, 105, 26, 2203, 132};
+
+    private int hours = 3;
+
+    private int totalWidthUnits = 720;
+
+    private static final String SERVICE_URL = "http://www.radiotimes.com/rt-service/schedule/get";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView) findViewById(R.id.textView);
+        listView = (ListView) findViewById(R.id.listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        try {
-            JSONObject json = new JSONObject(getReposne());
-            JSONArray channels = json.getJSONArray("Channels");
+                Log.v(TAG, "item clicked: " + position);
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < channels.length(); i++)
-            {
-                sb.append(channels.getJSONObject(i).getString("DisplayName"));
+                Intent intent = new Intent(getApplicationContext(), ChannelActivity.class);
+                intent.putExtra(ChannelActivity.CHANNEL_POSITION, position);
+                startActivity(intent);
             }
+        });
 
-            textView.setText(sb.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, "https://raw.githubusercontent.com/deanoj/deanoj.github.io/master/assets/tv.txt", null, new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        Log.v(TAG, response.toString());
+                        parseResponse(response.toString());
+                    }
+                }, new Response.ErrorListener() {
 
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        Log.e(TAG, "error");
+                    }
+                });
+
+        NetworkSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
+        // MOCK resposne
+        //parseResponse(Faker.RT_RESPONSE_JSON);
+        Log.v(TAG, buildUrl());
+        Log.v(TAG, "complete");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,8 +110,30 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private String getReposne()
-    {
-        return Faker.RT_RESPONSE_JSON;
+
+    private void parseResponse(String response) {
+        ResponseParser parser = ResponseParser.getInstance();
+        try {
+            parser.parseResponse(new JSONObject(response));
+            channels = parser.getResults().getChannels();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        adapter = new ChannelAdapter(this,
+                android.R.layout.simple_list_item_2, android.R.id.text1,
+                channels);
+
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    private String buildUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(SERVICE_URL);
+        sb.append("?");
+        sb.append("startDate=04-01-2015%2003:00:00&hours=3&totalWidthUnits=720&channels=94,105,26,2203,132");
+        return sb.toString();
     }
 }
