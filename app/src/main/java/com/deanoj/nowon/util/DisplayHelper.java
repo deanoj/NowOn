@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by deano on 03/01/15.
  */
-public class DateHelper {
+public class DisplayHelper {
 
     public static String toDateString(Date date)
     {
@@ -20,5 +20,10 @@ public class DateHelper {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = df.parse(dateString);
         return date;
+    }
+
+    public String getFormattedShowTime(Date startTime, Date endTime) {
+        DateFormat df = new SimpleDateFormat("h:mma");
+        return df.format(startTime);
     }
 }
