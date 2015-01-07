@@ -73,6 +73,7 @@ public class ResponseParser {
             tvListing.setDescription(listing.getString("Description"));
             try {
                 tvListing.setStartTime(DateHelper.parseDateString(listing.getString("StartTimeMF")));
+                tvListing.setEndTime(DateHelper.parseDateString(listing.getString("EndTimeMF")));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

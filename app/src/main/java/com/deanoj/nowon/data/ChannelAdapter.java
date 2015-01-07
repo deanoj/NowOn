@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.deanoj.nowon.R;
 import com.deanoj.nowon.data.dto.Channel;
 
 import java.text.NumberFormat;
@@ -32,23 +33,35 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(android.R.layout.simple_list_item_2, null);
+            view = inflater.inflate(R.layout.channel_row, null);
         }
 
         Channel channel = getItem(position);
 
         if (channel != null) {
-            TextView displayNameView = (TextView) view
-                    .findViewById(android.R.id.text1);
+            TextView channelNameView = (TextView) view
+                    .findViewById(R.id.channel);
 
-            TextView nowOnView = (TextView) view
+            TextView titleView = (TextView) view
+                    .findViewById(R.id.title);
+
+            TextView startTimeView = (TextView) view
+                    .findViewById(R.id.start_time);
+
+            TextView endTimeView = (TextView) view
                     .findViewById(android.R.id.text2);
 
-            if (displayNameView != null) {
-                displayNameView.setText(channel.getDisplayName());
+            if (channelNameView != null) {
+                channelNameView.setText(channel.getDisplayName());
             }
-            if (nowOnView != null) {
-                nowOnView.setText(channel.getTvListings().get(0).getTitle());
+            if (titleView != null) {
+                titleView.setText(channel.getTvListings().get(0).getTitle());
+            }
+            if (startTimeView != null) {
+                startTimeView.setText(channel.getTvListings().get(0).getFormattedStartTime());
+            }
+            if (endTimeView != null) {
+                endTimeView.setText(channel.getTvListings().get(0).getFormattedEndTime());
             }
         }
 

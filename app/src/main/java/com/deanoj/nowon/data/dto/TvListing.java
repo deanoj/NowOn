@@ -47,13 +47,13 @@ public class TvListing {
         this.startTime = startTime;
     }
 
-    public void setStartTime(String startTime) {
-        Calendar calendar = Calendar.getInstance();
-
-    }
-
     public Date getEndTime() {
         return endTime;
+    }
+
+    public String getFormattedEndTime() {
+        DateFormat df = new SimpleDateFormat("h:mma");
+        return df.format(endTime);
     }
 
     public void setEndTime(Date endTime) {
