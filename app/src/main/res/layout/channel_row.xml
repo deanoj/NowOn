@@ -11,41 +11,24 @@
         android:text="title"
         android:textSize="@dimen/abc_text_size_large_material" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/title"
+        android:text="title"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:paddingEnd="10sp"
+        android:paddingRight="10sp"
+        android:textColor="@android:color/black" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:text="title"
-            android:textSize="@dimen/abc_text_size_large_material"
-            android:paddingEnd="10sp"
-            android:paddingRight="10sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1:45am"
-            android:id="@+id/start_time"
-            android:textSize="@dimen/abc_text_size_medium_material"
-            android:paddingEnd="10sp"
-            android:paddingRight="10sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3.45am"
-            android:id="@+id/end_time"
-            android:textSize="@dimen/abc_text_size_medium_material"
-            android:paddingEnd="10sp"
-            android:paddingRight="10sp" />
-
-
-
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1:45am"
+        android:id="@+id/timing"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:paddingEnd="10sp"
+        android:paddingRight="10sp" />
 
 
 

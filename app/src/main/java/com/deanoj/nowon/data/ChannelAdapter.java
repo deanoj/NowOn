@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import com.deanoj.nowon.R;
 import com.deanoj.nowon.data.dto.Channel;
+import com.deanoj.nowon.util.DisplayHelper;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,11 +47,8 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             TextView titleView = (TextView) view
                     .findViewById(R.id.title);
 
-            TextView startTimeView = (TextView) view
-                    .findViewById(R.id.start_time);
-
-            TextView endTimeView = (TextView) view
-                    .findViewById(android.R.id.text2);
+            TextView timingView = (TextView) view
+                    .findViewById(R.id.timing);
 
             if (channelNameView != null) {
                 channelNameView.setText(channel.getDisplayName());
@@ -57,15 +56,19 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             if (titleView != null) {
                 titleView.setText(channel.getTvListings().get(0).getTitle());
             }
-            if (startTimeView != null) {
-                startTimeView.setText(channel.getTvListings().get(0).getFormattedStartTime());
-            }
-            if (endTimeView != null) {
-                endTimeView.setText(channel.getTvListings().get(0).getFormattedEndTime());
+
+
+            if (timingView != null) {
+                timingView.setText(DisplayHelper.getFormattedShowTime(
+                                channel.getTvListings().get(0).getStartTime(),
+                                channel.getTvListings().get(0).getEndTime())
+                );
             }
         }
 
         return view;
     }
+
+
 
 }

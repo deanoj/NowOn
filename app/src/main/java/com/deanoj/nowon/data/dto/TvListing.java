@@ -38,11 +38,6 @@ public class TvListing {
         return startTime;
     }
 
-    public String getFormattedStartTime() {
-        DateFormat df = new SimpleDateFormat("h:mma");
-        return df.format(startTime);
-    }
-
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }

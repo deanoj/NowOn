@@ -11,19 +11,19 @@ import java.util.Date;
 /**
  * Created by deano on 03/01/15.
  */
-public class DateHelperTest extends AndroidTestCase {
+public class DisplayHelperTest extends AndroidTestCase {
 
     public void testToDateString()
     {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2015, 0, 4, 3, 0, 0);
-        Assert.assertEquals("04-01-2015 03:00:00", DateHelper.toDateString(calendar.getTime()));
+        Assert.assertEquals("04-01-2015 03:00:00", DisplayHelper.toDateString(calendar.getTime()));
     }
 
     public void testParseDateString() throws ParseException
     {
         String dateString = "2015-01-04 01:40:00Z";
-        Date result = DateHelper.parseDateString(dateString);
+        Date result = DisplayHelper.parseDateString(dateString);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(result.getTime());

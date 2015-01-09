@@ -3,7 +3,7 @@ package com.deanoj.nowon.data;
 import com.deanoj.nowon.data.dto.Channel;
 import com.deanoj.nowon.data.dto.EnquiryResults;
 import com.deanoj.nowon.data.dto.TvListing;
-import com.deanoj.nowon.util.DateHelper;
+import com.deanoj.nowon.util.DisplayHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,8 +72,8 @@ public class ResponseParser {
             tvListing.setTitle(listing.getString("Title"));
             tvListing.setDescription(listing.getString("Description"));
             try {
-                tvListing.setStartTime(DateHelper.parseDateString(listing.getString("StartTimeMF")));
-                tvListing.setEndTime(DateHelper.parseDateString(listing.getString("EndTimeMF")));
+                tvListing.setStartTime(DisplayHelper.parseDateString(listing.getString("StartTimeMF")));
+                tvListing.setEndTime(DisplayHelper.parseDateString(listing.getString("EndTimeMF")));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

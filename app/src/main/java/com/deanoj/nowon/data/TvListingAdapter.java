@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.deanoj.nowon.R;
 import com.deanoj.nowon.data.dto.Channel;
 import com.deanoj.nowon.data.dto.TvListing;
+import com.deanoj.nowon.util.DisplayHelper;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class TvListingAdapter extends ArrayAdapter<TvListing> {
             TextView description = (TextView) view
                     .findViewById(R.id.description);
 
-            TextView startTime = (TextView) view
+            TextView timingView = (TextView) view
                     .findViewById(R.id.start_time);
 
             if (title != null) {
@@ -56,8 +57,11 @@ public class TvListingAdapter extends ArrayAdapter<TvListing> {
                 description.setText(listing.getDescription());
             }
 
-            if (startTime != null) {
-                startTime.setText(listing.getFormattedStartTime());
+            if (timingView != null) {
+                timingView.setText(DisplayHelper.getFormattedShowTime(
+                    listing.getStartTime(),
+                    listing.getEndTime())
+                );
             }
 
         }

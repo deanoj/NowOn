@@ -22,8 +22,12 @@ public class DisplayHelper {
         return date;
     }
 
-    public String getFormattedShowTime(Date startTime, Date endTime) {
+    public static String getFormattedShowTime(Date startTime, Date endTime) {
         DateFormat df = new SimpleDateFormat("h:mma");
-        return df.format(startTime);
+        StringBuilder sb = new StringBuilder();
+        sb.append(df.format(startTime));
+        sb.append(" - ");
+        sb.append(df.format(endTime));
+        return sb.toString();
     }
 }
