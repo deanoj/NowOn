@@ -52,34 +52,9 @@ public class ResponseParser {
 
         for (int i = 0; i < channelListing.length(); i++)
         {
-            Channel channel = new Channel();
-            channel.setDisplayName(channelListing.getJSONObject(i).getString("DisplayName"));
-
-            channel.setTvListings(getTvListings(channelListing.getJSONObject(i).getJSONArray("TvListings")));
-
+            Channel channel = new Channel(channelListing.getJSONObject(i));
             results.getChannels().add(channel);
         }
-    }
-
-    private List<TvListing> getTvListings(JSONArray listings) throws JSONException
-    {
-        List<TvListing> channelTvListing = new ArrayList<TvListing>();
-
-        for (int i = 0; i < listings.length(); i++)
-        {
-            TvListing tvListing = new TvListing();
-            JSONObject listing = listings.getJSONObject(i);
-            tvListing.setTitle(listing.getString("Title"));
-            tvListing.setDescription(listing.getString("Description"));
-            try {
-                tvListing.setStartTime(DisplayHelper.parseDateString(listing.getString("StartTimeMF")));
-                tvListing.setEndTime(DisplayHelper.parseDateString(listing.getString("EndTimeMF")));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            channelTvListing.add(tvListing);
-        }
-        return channelTvListing;
     }
 
     public EnquiryResults getResults() {

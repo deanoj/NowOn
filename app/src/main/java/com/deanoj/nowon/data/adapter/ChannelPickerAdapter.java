@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.deanoj.nowon.ChannelEnum;
+import com.deanoj.nowon.util.ChannelEnum;
 import com.deanoj.nowon.R;
-import com.deanoj.nowon.data.dto.Channel;
 
 import java.util.List;
 

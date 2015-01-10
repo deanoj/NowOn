@@ -1,11 +1,26 @@
 package com.deanoj.nowon.data.dto;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by deano on 01/01/15.
  */
 public class Channel {
+
+    public Channel (JSONObject object) {
+        try {
+            this.displayName = object.getString("DisplayName");
+            this.id = object.getInt("Id");
+            this.tvListings = TvListing.fromJson(object.getJSONArray("TvListings"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     private String displayName;
 
@@ -36,4 +51,5 @@ public class Channel {
     public void setId(int id) {
         this.id = id;
     }
+
 }

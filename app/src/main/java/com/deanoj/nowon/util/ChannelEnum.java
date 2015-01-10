@@ -1,4 +1,4 @@
-package com.deanoj.nowon;
+package com.deanoj.nowon.util;
 
 /**
  * Created by deano on 09/01/15.

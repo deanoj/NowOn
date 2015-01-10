@@ -53,16 +53,18 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             if (channelNameView != null) {
                 channelNameView.setText(channel.getDisplayName());
             }
-            if (titleView != null) {
+            if (titleView != null && channel.getTvListings() != null) {
                 titleView.setText(channel.getTvListings().get(0).getTitle());
             }
 
 
             if (timingView != null) {
+/*
                 timingView.setText(DisplayHelper.getFormattedShowTime(
                                 channel.getTvListings().get(0).getStartTime(),
                                 channel.getTvListings().get(0).getEndTime())
                 );
+*/
             }
         }
 
