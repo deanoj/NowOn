@@ -1,43 +1,33 @@
 package com.deanoj.nowon;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.deanoj.nowon.data.ResponseParser;
-import com.deanoj.nowon.data.adapter.TvListingAdapter;
+import com.deanoj.nowon.data.adapter.ChannelPickerAdapter;
+
+import java.util.Arrays;
 
 
-public class ChannelActivity extends ActionBarActivity {
+public class ChannelPickerActivity extends ActionBarActivity {
 
-    public static final String CHANNEL_POSITION = "position";
+    private static final String TAG = "ChannelPickerActivity";
 
     private ListView listView;
-
-    private TvListingAdapter adapter;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_channel);
+        setContentView(R.layout.activity_channel_picker);
 
-        int position = 0;
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            position = (int) extras.get(CHANNEL_POSITION);
-        }
-
-        listView = (ListView) findViewById(R.id.listViewTvListings);
-
-        ResponseParser parser = ResponseParser.getInstance();
+        listView = (ListView) findViewById(R.id.channel_picker_list_view);
 
 
-        adapter = new TvListingAdapter(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1,
-                parser.getResults().getChannels().get(position).getTvListings());
+        final ChannelPickerAdapter adapter = new ChannelPickerAdapter(this,
+                R.layout.item_channel_picker, android.R.id.text1,
+                Arrays.asList(ChannelEnum.values()));
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -45,10 +35,9 @@ public class ChannelActivity extends ActionBarActivity {
 
 
     @Override
-
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_channel, menu);
+        getMenuInflater().inflate(R.menu.menu_channel_picker, menu);
         return true;
     }
 
@@ -66,6 +55,4 @@ public class ChannelActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

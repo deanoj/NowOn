@@ -4,6 +4,8 @@
     <string name="app_name">Now On</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_channel_picker">Pick Channels</string>
+
     <string name="title_activity_channel">ChannelActivity</string>
     <string name="title_activity_channel_picker">ChannelPickerActivity</string>
 

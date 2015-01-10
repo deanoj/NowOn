@@ -1,4 +1,4 @@
-package com.deanoj.nowon.data;
+package com.deanoj.nowon.data.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
