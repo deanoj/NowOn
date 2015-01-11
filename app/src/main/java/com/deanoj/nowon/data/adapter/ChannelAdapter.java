@@ -1,6 +1,7 @@
 package com.deanoj.nowon.data.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,8 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                 channelNameView.setText(channel.getDisplayName());
             }
             if (titleView != null && channel.getTvListings() != null) {
-                titleView.setText(channel.getTvListings().get(0).getTitle());
+                String title = channel.getTvListings().get(0).getTitle();
+                titleView.setText(Html.fromHtml(title).toString());
             }
 
 

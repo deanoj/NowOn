@@ -31,6 +31,8 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
+    private static final String GITHUB_URL = "https://raw.githubusercontent.com/deanoj/deanoj.github.io/master/assets/tv.txt";
+    private static final String TEST_URL = "http://192.168.20.20/default/tv.txt";
 
     private ListView listView;
 
@@ -150,6 +152,7 @@ public class MainActivity extends ActionBarActivity {
                 .appendQueryParameter("totalWidthUnits", "720")
                 .appendQueryParameter("channels","94,105,26,2203,132");
 
-        return builder.build().toString();
+        //return builder.build().toString();
+        return TEST_URL;
     }
 }

@@ -1,6 +1,7 @@
 package com.deanoj.nowon.data.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +51,11 @@ public class TvListingAdapter extends ArrayAdapter<TvListing> {
                     .findViewById(R.id.start_time);
 
             if (title != null) {
-                title.setText(listing.getTitle());
+                title.setText(Html.fromHtml(listing.getTitle().toString()));
             }
 
             if (description != null) {
-                description.setText(listing.getDescription());
+                description.setText(Html.fromHtml(listing.getDescription()));
             }
 
             if (timingView != null) {
