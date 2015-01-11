@@ -59,12 +59,12 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
 
 
             if (timingView != null) {
-/*
+
                 timingView.setText(DisplayHelper.getFormattedShowTime(
                                 channel.getTvListings().get(0).getStartTime(),
                                 channel.getTvListings().get(0).getEndTime())
                 );
-*/
+
             }
         }
 

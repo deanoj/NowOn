@@ -20,7 +20,8 @@
         </activity>
         <activity
             android:name=".ChannelActivity"
-            android:label="@string/title_activity_channel" >
+            android:label="@string/title_activity_channel"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".ChannelPickerActivity"

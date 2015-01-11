@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.deanoj.nowon.data.ResponseParser;
 import com.deanoj.nowon.data.adapter.TvListingAdapter;
+import com.deanoj.nowon.data.dto.Channel;
 
 
 public class ChannelActivity extends ActionBarActivity {
@@ -30,14 +31,15 @@ public class ChannelActivity extends ActionBarActivity {
             position = (int) extras.get(CHANNEL_POSITION);
         }
 
-        listView = (ListView) findViewById(R.id.listViewTvListings);
-
         ResponseParser parser = ResponseParser.getInstance();
+        Channel channel = parser.getResults().getChannels().get(position);
 
+        setTitle(channel.getDisplayName());
 
+        listView = (ListView) findViewById(R.id.listViewTvListings);
         adapter = new TvListingAdapter(this,
                 android.R.layout.simple_list_item_2, android.R.id.text1,
-                parser.getResults().getChannels().get(position).getTvListings());
+                channel.getTvListings());
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

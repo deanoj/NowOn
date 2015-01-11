@@ -22,9 +22,6 @@ public class NetworkSingleton {
 
     private static Context mCtx;
 
-
-
-
     private NetworkSingleton(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();

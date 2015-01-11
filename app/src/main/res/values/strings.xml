@@ -7,6 +7,6 @@
     <string name="action_channel_picker">Pick Channels</string>
 
     <string name="title_activity_channel">ChannelActivity</string>
-    <string name="title_activity_channel_picker">ChannelPickerActivity</string>
+    <string name="title_activity_channel_picker">Choose channels</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.deanoj.nowon;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -44,7 +46,6 @@ public class MainActivity extends ActionBarActivity {
 
     private int totalWidthUnits = 720;
 
-    private static final String SERVICE_URL = "http://www.radiotimes.com/rt-service/schedule/get";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +65,16 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.show();
+
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, "https://raw.githubusercontent.com/deanoj/deanoj.github.io/master/assets/tv.txt", null, new Response.Listener() {
+                (Request.Method.GET, buildUrl(), null, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         Log.v(TAG, response.toString());
+                        pd.dismiss();
                         parseResponse(response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -77,6 +83,7 @@ public class MainActivity extends ActionBarActivity {
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                         Log.e(TAG, "error");
+                        pd.dismiss();
                     }
                 });
 
@@ -132,10 +139,17 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private String buildUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SERVICE_URL);
-        sb.append("?");
-        sb.append("startDate=04-01-2015%2003:00:00&hours=3&totalWidthUnits=720&channels=94,105,26,2203,132");
-        return sb.toString();
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("www.radiotimes.com")
+                .appendPath("rt-service")
+                .appendPath("schedule")
+                .appendPath("get")
+                .appendQueryParameter("startDate", "12-01-2015 22:00:00")
+                .appendQueryParameter("hours", "3")
+                .appendQueryParameter("totalWidthUnits", "720")
+                .appendQueryParameter("channels","94,105,26,2203,132");
+
+        return builder.build().toString();
     }
 }
