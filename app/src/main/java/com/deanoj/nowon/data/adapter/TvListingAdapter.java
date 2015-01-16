@@ -9,8 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.deanoj.nowon.R;
-import com.deanoj.nowon.data.dto.Channel;
-import com.deanoj.nowon.data.dto.TvListing;
+import com.deanoj.nowon.data.results.TvListing;
 import com.deanoj.nowon.util.DisplayHelper;
 
 import java.util.List;

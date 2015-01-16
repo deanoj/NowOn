@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -18,9 +17,6 @@ import android.widget.ListView;
 
 import com.deanoj.nowon.data.adapter.ChannelPickerAdapter;
 import com.deanoj.nowon.service.NowService;
-import com.deanoj.nowon.util.ChannelEnum;
-
-import java.util.Arrays;
 
 
 public class ChannelPickerActivity extends ActionBarActivity {
@@ -43,11 +39,11 @@ public class ChannelPickerActivity extends ActionBarActivity {
             mBound = true;
 
             Log.d(TAG, "NowService connected");
-            Log.d(TAG, mService.getChannels().toString());
+            Log.d(TAG, mService.getResults().getChannels().toString());
 
             final ChannelPickerAdapter adapter = new ChannelPickerAdapter(getApplicationContext(),
                     android.R.layout.simple_list_item_checked,
-                    mService.getChannels());
+                    mService.getResults().getChannels());
 
 
             listView.setAdapter(adapter);
@@ -98,7 +94,7 @@ public class ChannelPickerActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckedTextView check = (CheckedTextView)view;
                 Log.d(TAG, "item clicked "+position);
-                mService.setChannelSelection(position, check.isChecked());
+                //mService.setChannelSelection(position, check.isChecked());
             }
         });
 

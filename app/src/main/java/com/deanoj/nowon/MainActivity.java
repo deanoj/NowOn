@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
@@ -21,9 +20,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.deanoj.nowon.data.adapter.ChannelAdapter;
-import com.deanoj.nowon.data.NetworkSingleton;
-import com.deanoj.nowon.data.ResponseParser;
-import com.deanoj.nowon.data.dto.Channel;
+import com.deanoj.nowon.net.NetworkSingleton;
+import com.deanoj.nowon.util.ResponseParser;
+import com.deanoj.nowon.data.results.Channel;
 import com.deanoj.nowon.service.NowService;
 
 import org.json.JSONException;
@@ -45,14 +44,6 @@ public class MainActivity extends ActionBarActivity {
 
     private List<Channel> channels;
 
-    private final Date startDate = new Date();
-
-    private int[] channelNumbers = {94, 105, 26, 2203, 132};
-
-    private int hours = 3;
-
-    private int totalWidthUnits = 720;
-
     private NowService mService;
 
     private boolean mBound = false;
@@ -69,10 +60,11 @@ public class MainActivity extends ActionBarActivity {
             mBound = true;
 
             Log.d(TAG, "NowService connected");
-            Log.d(TAG, mService.getChannels().toString());
+            Log.d(TAG, mService.getResults().getChannels().toString());
 
-            doRequest();
-
+            if (mService.isRequiresUpdate()) {
+                doRequest();
+            }
         }
 
         @Override
@@ -172,6 +164,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void doRequest() {
+        Log.d(TAG, "Making request");
+
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, mService.getUrl(), null, new Response.Listener() {
                     @Override
@@ -179,6 +173,7 @@ public class MainActivity extends ActionBarActivity {
                         Log.v(TAG, response.toString());
                         progress.dismiss();
                         parseResponse(response.toString());
+                        mService.setRequiresUpdate(false);
                     }
                 }, new Response.ErrorListener() {
 

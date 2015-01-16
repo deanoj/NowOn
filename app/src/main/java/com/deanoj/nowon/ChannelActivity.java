@@ -6,9 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.deanoj.nowon.data.ResponseParser;
+import com.deanoj.nowon.util.ResponseParser;
 import com.deanoj.nowon.data.adapter.TvListingAdapter;
-import com.deanoj.nowon.data.dto.Channel;
+import com.deanoj.nowon.data.results.Channel;
 
 
 public class ChannelActivity extends ActionBarActivity {

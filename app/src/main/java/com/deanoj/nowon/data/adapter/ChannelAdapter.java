@@ -9,11 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.deanoj.nowon.R;
-import com.deanoj.nowon.data.dto.Channel;
+import com.deanoj.nowon.data.results.Channel;
 import com.deanoj.nowon.util.DisplayHelper;
 
-import java.text.NumberFormat;
-import java.util.Date;
 import java.util.List;
 
 /**

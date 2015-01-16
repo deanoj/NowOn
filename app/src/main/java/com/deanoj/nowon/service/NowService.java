@@ -10,13 +10,12 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.deanoj.nowon.data.dto.Channel;
-import com.deanoj.nowon.util.ChannelEnum;
+import com.deanoj.nowon.data.ChannelNumber;
+import com.deanoj.nowon.data.results.EnquiryResults;
+import com.deanoj.nowon.util.RequestHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by deano on 13/01/15.
@@ -31,9 +30,13 @@ public class NowService extends Service {
 
     private static final String TEST_URL = "http://192.168.20.20/default/tv.txt";
 
-    private final ArrayList<ChannelItem> channels = new ArrayList<>();
+    private final EnquiryResults results = new EnquiryResults();
 
     private SharedPreferences sharedPreferences;
+
+    private final ArrayList<ChannelNumber> userChannels = new ArrayList<>();
+
+    private boolean requiresUpdate = true;
 
     public class LocalBinder extends Binder {
         public NowService getService() {
@@ -41,27 +44,6 @@ public class NowService extends Service {
         }
     }
 
-    public class ChannelItem {
-        private ChannelEnum channel;
-        private boolean chosen = false;
-
-        public ChannelItem(ChannelEnum channel, boolean chosen) {
-            this.channel = channel;
-            this.chosen = chosen;
-        }
-        public ChannelEnum getChannel() {
-            return channel;
-        }
-        public void setChannel(ChannelEnum channel) {
-            this.channel = channel;
-        }
-        public boolean isChosen() {
-            return this.chosen;
-        }
-        public void setChosen(boolean chosen) {
-            this.chosen = chosen;
-        }
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -73,28 +55,56 @@ public class NowService extends Service {
         super.onCreate();
         Log.d(TAG, "service started");
 
-        sharedPreferences = getApplicationContext().getSharedPreferences(
-                "channelSelection", Context.MODE_PRIVATE
-        );
+        // read selected channels preferences
+//        sharedPreferences = getApplicationContext().getSharedPreferences(
+//                "channelSelection", Context.MODE_PRIVATE
+//        );
+        userChannels.add(ChannelNumber.BBC_ONE);
+        userChannels.add(ChannelNumber.BBC_TWO);
 
-        for (ChannelEnum channel : ChannelEnum.values()) {
-            channels.add(new ChannelItem(channel, isChannelSelected(channel)));
-        }
+        Log.d(TAG, getUrl());
     }
 
-    public void onDestroy() {
-
+    public boolean isRequiresUpdate() {
+        return requiresUpdate;
     }
 
-    public ArrayList<ChannelItem> getChannels() {
-        return channels;
+    public void setRequiresUpdate(boolean requiresUpdate) {
+        this.requiresUpdate = requiresUpdate;
     }
 
-    private boolean isChannelSelected(ChannelEnum channel) {
-
-        return sharedPreferences.getBoolean(String.valueOf(channel.getId()), false);
+    public EnquiryResults getResults() {
+        return results;
     }
 
+    // construct URL to query API
+    public String getUrl()
+    {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("www.radiotimes.com")
+                .appendPath("rt-service")
+                .appendPath("schedule")
+                .appendPath("get")
+                .appendQueryParameter("startDate", RequestHelper.getDateStringHour())
+                .appendQueryParameter("hours", "3")
+                .appendQueryParameter("totalWidthUnits", "720")
+                .appendQueryParameter("channels", RequestHelper.getChannelQueryParameter(userChannels));
+
+        return builder.build().toString();
+    }
+
+
+
+    // url - get user selected channels
+
+    // indicator channel selection has changed
+
+    // setter/unsetter for a channel selection
+
+    // getter and setter for results
+
+/*
     public void setChannelSelection(int position, boolean chosen) {
         ChannelItem item = channels.get(position);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -104,29 +114,6 @@ public class NowService extends Service {
         editor.apply();
     }
 
-    public String getUrl()
-    {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http")
-                .authority("www.radiotimes.com")
-                .appendPath("rt-service")
-                .appendPath("schedule")
-                .appendPath("get")
-                .appendQueryParameter("startDate", "12-01-2015 22:00:00")
-                .appendQueryParameter("hours", "3")
-                .appendQueryParameter("totalWidthUnits", "720")
-                .appendQueryParameter("channels",getSelectedChannels());
 
-        return builder.build().toString();
-    }
-
-    private String getSelectedChannels() {
-        List<Long> selected = new ArrayList<Long>();
-
-        for (ChannelItem channel : channels) {
-            selected.add(channel.getChannel().getId());
-        }
-        return TextUtils.join(",", selected.toArray());
-    }
-
+*/
 }
