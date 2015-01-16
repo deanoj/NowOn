@@ -26,4 +26,8 @@ public enum ChannelEnum {
     public String getTitle() {
         return this.title;
     }
+
+    public String getIdAsString() {
+        return String.valueOf(this.id);
+    }
 }

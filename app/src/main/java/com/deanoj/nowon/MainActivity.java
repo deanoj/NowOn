@@ -1,9 +1,13 @@
 package com.deanoj.nowon;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +24,7 @@ import com.deanoj.nowon.data.adapter.ChannelAdapter;
 import com.deanoj.nowon.data.NetworkSingleton;
 import com.deanoj.nowon.data.ResponseParser;
 import com.deanoj.nowon.data.dto.Channel;
+import com.deanoj.nowon.service.NowService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,6 +53,52 @@ public class MainActivity extends ActionBarActivity {
 
     private int totalWidthUnits = 720;
 
+    private NowService mService;
+
+    private boolean mBound = false;
+
+    private ProgressDialog progress;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service)
+        {
+            NowService.LocalBinder binder = (NowService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+
+            Log.d(TAG, "NowService connected");
+            Log.d(TAG, mService.getChannels().toString());
+
+            doRequest();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            mBound = false;
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Intent intent = new Intent(this, NowService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
+        Log.d(TAG, "NowService connecting...");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,32 +118,10 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Loading...");
-        pd.show();
+        progress = new ProgressDialog(this);
+        progress.setMessage("Loading...");
+        progress.show();
 
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, buildUrl(), null, new Response.Listener() {
-                    @Override
-                    public void onResponse(Object response) {
-                        Log.v(TAG, response.toString());
-                        pd.dismiss();
-                        parseResponse(response.toString());
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        Log.e(TAG, "error");
-                        pd.dismiss();
-                    }
-                });
-
-        NetworkSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
-        // MOCK resposne
-        //parseResponse(Faker.RT_RESPONSE_JSON);
-        Log.v(TAG, buildUrl());
         Log.v(TAG, "complete");
     }
 
@@ -115,6 +144,8 @@ public class MainActivity extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     private void showChannelPicker() {
         Intent intent = new Intent(this, ChannelPickerActivity.class);
@@ -140,19 +171,26 @@ public class MainActivity extends ActionBarActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private String buildUrl() {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http")
-                .authority("www.radiotimes.com")
-                .appendPath("rt-service")
-                .appendPath("schedule")
-                .appendPath("get")
-                .appendQueryParameter("startDate", "12-01-2015 22:00:00")
-                .appendQueryParameter("hours", "3")
-                .appendQueryParameter("totalWidthUnits", "720")
-                .appendQueryParameter("channels","94,105,26,2203,132");
+    private void doRequest() {
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, mService.getUrl(), null, new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        Log.v(TAG, response.toString());
+                        progress.dismiss();
+                        parseResponse(response.toString());
+                    }
+                }, new Response.ErrorListener() {
 
-        //return builder.build().toString();
-        return TEST_URL;
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        Log.e(TAG, "error");
+                        progress.dismiss();
+                    }
+                }
+        );
+
+        NetworkSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
     }
 }
