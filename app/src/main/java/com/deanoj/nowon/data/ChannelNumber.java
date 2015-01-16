@@ -1,9 +1,9 @@
-package com.deanoj.nowon.util;
+package com.deanoj.nowon.data;
 
 /**
  * Created by deano on 09/01/15.
  */
-public enum ChannelEnum {
+public enum ChannelNumber {
 
     BBC_ONE (94, "BBC One"),
     BBC_TWO (105, "BBC Two"),
@@ -14,7 +14,7 @@ public enum ChannelEnum {
 
     private final String title;
 
-    ChannelEnum(long id, String title) {
+    ChannelNumber(long id, String title) {
         this.id = id;
         this.title = title;
     }

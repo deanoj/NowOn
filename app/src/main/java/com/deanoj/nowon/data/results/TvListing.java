@@ -1,4 +1,4 @@
-package com.deanoj.nowon.data.dto;
+package com.deanoj.nowon.data.results;
 
 import com.deanoj.nowon.util.DisplayHelper;
 
@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**

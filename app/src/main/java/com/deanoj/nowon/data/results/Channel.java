@@ -1,15 +1,15 @@
-package com.deanoj.nowon.data.dto;
+package com.deanoj.nowon.data.results;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by deano on 01/01/15.
  */
-public class Channel {
+public class Channel implements Serializable {
 
     public Channel (JSONObject object) {
         try {

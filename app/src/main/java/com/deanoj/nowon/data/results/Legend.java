@@ -1,4 +1,4 @@
-package com.deanoj.nowon.data.dto;
+package com.deanoj.nowon.data.results;
 
 /**
  * Created by deano on 03/01/15.

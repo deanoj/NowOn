@@ -1,17 +1,11 @@
-package com.deanoj.nowon.data;
+package com.deanoj.nowon.util;
 
-import com.deanoj.nowon.data.dto.Channel;
-import com.deanoj.nowon.data.dto.EnquiryResults;
-import com.deanoj.nowon.data.dto.TvListing;
-import com.deanoj.nowon.util.DisplayHelper;
+import com.deanoj.nowon.data.results.Channel;
+import com.deanoj.nowon.data.results.EnquiryResults;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by deano on 01/01/15.

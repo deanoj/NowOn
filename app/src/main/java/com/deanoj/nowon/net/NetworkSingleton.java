@@ -1,4 +1,4 @@
-package com.deanoj.nowon.data;
+package com.deanoj.nowon.net;
 
 import android.content.Context;
 

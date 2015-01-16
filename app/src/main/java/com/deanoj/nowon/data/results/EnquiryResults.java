@@ -1,4 +1,4 @@
-package com.deanoj.nowon.data.dto;
+package com.deanoj.nowon.data.results;
 
 import java.util.ArrayList;
 import java.util.List;
