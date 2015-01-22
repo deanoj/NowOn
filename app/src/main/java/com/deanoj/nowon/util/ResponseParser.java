@@ -14,9 +14,11 @@ public class ResponseParser {
 
     private static ResponseParser instance = null;
 
-    private EnquiryResults results;
+    private EnquiryResults results = new EnquiryResults();
 
     private JSONObject response;
+
+    private boolean started = false;
 
     protected ResponseParser() {}
 
@@ -31,10 +33,10 @@ public class ResponseParser {
     public void parseResponse(JSONObject response)
     {
         this.response = response;
-        this.results = new EnquiryResults();
 
         try {
             parseChannels();
+            this.started = true;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -53,5 +55,9 @@ public class ResponseParser {
 
     public EnquiryResults getResults() {
         return results;
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 }

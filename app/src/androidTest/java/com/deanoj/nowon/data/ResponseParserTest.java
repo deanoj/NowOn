@@ -3,7 +3,8 @@ package com.deanoj.nowon.data;
 import android.test.ActivityUnitTestCase;
 import android.test.AndroidTestCase;
 
-import com.deanoj.nowon.data.dto.Channel;
+import com.deanoj.nowon.data.results.Channel;
+import com.deanoj.nowon.util.ResponseParser;
 
 import junit.framework.Assert;
 
@@ -30,10 +31,6 @@ public class ResponseParserTest extends AndroidTestCase {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public void testSomething() throws Throwable {
-        Assert.assertTrue(1 + 1 == 2);
     }
 
     public void testChannelListSize()

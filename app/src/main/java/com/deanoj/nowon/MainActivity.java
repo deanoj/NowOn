@@ -1,12 +1,9 @@
 package com.deanoj.nowon;
 
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,17 +16,18 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.deanoj.nowon.data.ChannelNumber;
 import com.deanoj.nowon.data.adapter.ChannelAdapter;
-import com.deanoj.nowon.net.NetworkSingleton;
-import com.deanoj.nowon.util.ResponseParser;
 import com.deanoj.nowon.data.results.Channel;
-import com.deanoj.nowon.service.NowService;
+import com.deanoj.nowon.net.NetworkSingleton;
+import com.deanoj.nowon.util.RequestHelper;
+import com.deanoj.nowon.util.ResponseParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -45,35 +43,9 @@ public class MainActivity extends ActionBarActivity {
 
     private List<Channel> channels = new ArrayList<>();
 
-    private NowService mService;
-
-    private boolean mBound = false;
-
     private ProgressDialog progress;
 
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service)
-        {
-            NowService.LocalBinder binder = (NowService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-
-            Log.d(TAG, "NowService connected");
-            Log.d(TAG, mService.getResults().getChannels().toString());
-            Log.d(TAG, "NowService update: " + mService.isRequiresUpdate());
-
-            if (mService.isRequiresUpdate()) {
-                doRequest();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName className) {
-            mBound = false;
-        }
-    };
+    private ResponseParser parser;
 
     @Override
     public void onStart() {
@@ -83,31 +55,28 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
+
     }
 
     @Override
     protected void onResume() {
         super.onStop();
 
-        Intent intent = new Intent(this, NowService.class);
-        //bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
-        if (mBound) {
-            if (mService.isRequiresUpdate()) {
-                doRequest();
-                mService.setRequiresUpdate(false);
-            }
-        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "oncreate");
+
+        parser = ResponseParser.getInstance();
+
+        if (parser.getResults().getChannels().size() == 0) {
+            doRequest();
+        }
 
         listView = (ListView) findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -124,7 +93,7 @@ public class MainActivity extends ActionBarActivity {
 
         adapter = new ChannelAdapter(this,
                 android.R.layout.simple_list_item_2, android.R.id.text1,
-                channels);
+                parser.getResults().getChannels());
 
         listView.setAdapter(adapter);
 
@@ -161,10 +130,8 @@ public class MainActivity extends ActionBarActivity {
 
     private void parseResponse(String response) {
         Log.d(TAG, "parsing response");
-        ResponseParser parser = ResponseParser.getInstance();
         try {
             parser.parseResponse(new JSONObject(response));
-            channels.addAll(parser.getResults().getChannels());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -173,7 +140,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void doRequest() {
-        String url = mService.getUrl();
+        String url = getUrl();
         Log.d(TAG, "Making request to " + url);
 
         progress = new ProgressDialog(this);
@@ -187,7 +154,7 @@ public class MainActivity extends ActionBarActivity {
                         Log.v(TAG, response.toString());
                         progress.dismiss();
                         parseResponse(response.toString());
-                        mService.setRequiresUpdate(false);
+
                     }
                 }, new Response.ErrorListener() {
 
@@ -202,4 +169,23 @@ public class MainActivity extends ActionBarActivity {
 
         NetworkSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
     }
+
+    // construct URL to query API
+    public String getUrl()
+    {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("www.radiotimes.com")
+                .appendPath("rt-service")
+                .appendPath("schedule")
+                .appendPath("get")
+                .appendQueryParameter("startDate", RequestHelper.getDateStringHour())
+                .appendQueryParameter("hours", "3")
+                .appendQueryParameter("totalWidthUnits", "720")
+                .appendQueryParameter("channels",
+                        RequestHelper.getChannelQueryParameter(Arrays.asList(ChannelNumber.values())));
+
+        return builder.build().toString();
+    }
+
 }

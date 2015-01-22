@@ -1,7 +1,11 @@
 package com.deanoj.nowon.data.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +58,10 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             }
             if (titleView != null && channel.getTvListings() != null) {
                 String title = channel.getTvListings().get(0).getTitle();
-                titleView.setText(Html.fromHtml(title).toString());
+                //SpannableString styledTitle = new SpannableString(Html.fromHtml(title).toString());
+                //styledTitle.setSpan(new ForegroundColorSpan(Color.RED), 0, 5, 0);
+                //styledTitle.setSpan(new RelativeSizeSpan(1.5f), 3, title.length() > 10 ? 10 : title.length(), 0);
+                titleView.setText(title);
             }
 
 
