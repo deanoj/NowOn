@@ -28,6 +28,7 @@ import com.deanoj.nowon.service.NowService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
 
     private ChannelAdapter adapter;
 
-    private List<Channel> channels;
+    private List<Channel> channels = new ArrayList<>();
 
     private NowService mService;
 
@@ -61,6 +62,7 @@ public class MainActivity extends ActionBarActivity {
 
             Log.d(TAG, "NowService connected");
             Log.d(TAG, mService.getResults().getChannels().toString());
+            Log.d(TAG, "NowService update: " + mService.isRequiresUpdate());
 
             if (mService.isRequiresUpdate()) {
                 doRequest();
@@ -76,11 +78,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-        Intent intent = new Intent(this, NowService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-
-        Log.d(TAG, "NowService connecting...");
     }
 
     @Override
@@ -89,6 +86,21 @@ public class MainActivity extends ActionBarActivity {
         if (mBound) {
             unbindService(mConnection);
             mBound = false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onStop();
+
+        Intent intent = new Intent(this, NowService.class);
+        //bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
+        if (mBound) {
+            if (mService.isRequiresUpdate()) {
+                doRequest();
+                mService.setRequiresUpdate(false);
+            }
         }
     }
 
@@ -110,9 +122,11 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        progress = new ProgressDialog(this);
-        progress.setMessage("Loading...");
-        progress.show();
+        adapter = new ChannelAdapter(this,
+                android.R.layout.simple_list_item_2, android.R.id.text1,
+                channels);
+
+        listView.setAdapter(adapter);
 
         Log.v(TAG, "complete");
     }
@@ -127,9 +141,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_channel_picker:
-                showChannelPicker();
-                return true;
+            //case R.id.action_channel_picker:
+            //    showChannelPicker();
+            //    return true;
             case R.id.action_settings:
                 return true;
             default:
@@ -146,28 +160,28 @@ public class MainActivity extends ActionBarActivity {
 
 
     private void parseResponse(String response) {
+        Log.d(TAG, "parsing response");
         ResponseParser parser = ResponseParser.getInstance();
         try {
             parser.parseResponse(new JSONObject(response));
-            channels = parser.getResults().getChannels();
+            channels.addAll(parser.getResults().getChannels());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
-        adapter = new ChannelAdapter(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1,
-                channels);
-
-        listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
     private void doRequest() {
-        Log.d(TAG, "Making request");
+        String url = mService.getUrl();
+        Log.d(TAG, "Making request to " + url);
+
+        progress = new ProgressDialog(this);
+        progress.setMessage("Loading...");
+        progress.show();
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, mService.getUrl(), null, new Response.Listener() {
+                (Request.Method.GET, url, null, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         Log.v(TAG, response.toString());

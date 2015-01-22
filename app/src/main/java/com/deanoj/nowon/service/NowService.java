@@ -11,10 +11,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.deanoj.nowon.data.ChannelNumber;
+import com.deanoj.nowon.data.results.Channel;
 import com.deanoj.nowon.data.results.EnquiryResults;
 import com.deanoj.nowon.util.RequestHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,7 +36,7 @@ public class NowService extends Service {
 
     private SharedPreferences sharedPreferences;
 
-    private final ArrayList<ChannelNumber> userChannels = new ArrayList<>();
+    private final ArrayList<ChannelNumber> userChannels = new ArrayList<>(ChannelNumber.values().length);
 
     private boolean requiresUpdate = true;
 
@@ -54,16 +56,34 @@ public class NowService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "service started");
-
+/*
         // read selected channels preferences
-//        sharedPreferences = getApplicationContext().getSharedPreferences(
-//                "channelSelection", Context.MODE_PRIVATE
-//        );
-        userChannels.add(ChannelNumber.BBC_ONE);
-        userChannels.add(ChannelNumber.BBC_TWO);
+        sharedPreferences = getApplicationContext().getSharedPreferences(
+                "channelSelection", Context.MODE_PRIVATE
+        );
+
+        if (sharedPreferences.getAll().size() == 0) {
+            setDefaultChannels();
+        } else {
+            for (ChannelNumber channel : ChannelNumber.values()) {
+                if (sharedPreferences.getBoolean(channel.getIdAsString(), false)) {
+                    Log.d(TAG, "adding channel " + channel.getTitle());
+                    userChannels.add(channel);
+                }
+            }
+        }
+*/
+        setDefaultChannels();
 
         Log.d(TAG, getUrl());
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "NowService stopping");
+    }
+
 
     public boolean isRequiresUpdate() {
         return requiresUpdate;
@@ -94,26 +114,33 @@ public class NowService extends Service {
         return builder.build().toString();
     }
 
-
-
-    // url - get user selected channels
-
-    // indicator channel selection has changed
-
-    // setter/unsetter for a channel selection
-
-    // getter and setter for results
-
-/*
-    public void setChannelSelection(int position, boolean chosen) {
-        ChannelItem item = channels.get(position);
+    public void setChannelSelection(ChannelNumber channel, boolean chosen) {
+        Log.d(TAG, "setting channel selection " + channel.getTitle() + "to" + chosen);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        item.setChosen(chosen);
-        editor.putBoolean(item.getChannel().getIdAsString(), chosen);
+        userChannels.add(channel);
+        editor.putBoolean(channel.getIdAsString(), chosen);
         editor.apply();
+
+        requiresUpdate = true;
+    }
+
+    public ArrayList<ChannelNumber> getUserChannels() {
+        return userChannels;
     }
 
 
-*/
+
+    public void addUserChannel(int position, ChannelNumber channel) {
+        userChannels.add(position, channel);
+        requiresUpdate = true;
+    }
+
+    public void removeUserChannel(ChannelNumber channel) {
+        userChannels.remove(channel);
+        requiresUpdate = true;
+    }
+
+    private void setDefaultChannels() {
+        userChannels.addAll(Arrays.asList(ChannelNumber.values()));
+    }
 }

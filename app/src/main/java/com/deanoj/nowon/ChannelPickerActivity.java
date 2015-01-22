@@ -15,8 +15,14 @@ import android.widget.AdapterView;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 
+import com.deanoj.nowon.data.ChannelNumber;
 import com.deanoj.nowon.data.adapter.ChannelPickerAdapter;
 import com.deanoj.nowon.service.NowService;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 public class ChannelPickerActivity extends ActionBarActivity {
@@ -29,6 +35,8 @@ public class ChannelPickerActivity extends ActionBarActivity {
 
     private boolean mBound = false;
 
+    private List<ChannelNumber> allChannels = new ArrayList<ChannelNumber>();
+
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
@@ -39,15 +47,34 @@ public class ChannelPickerActivity extends ActionBarActivity {
             mBound = true;
 
             Log.d(TAG, "NowService connected");
-            Log.d(TAG, mService.getResults().getChannels().toString());
+            Log.d(TAG, mService.getUserChannels().size() + "");
 
             final ChannelPickerAdapter adapter = new ChannelPickerAdapter(getApplicationContext(),
                     android.R.layout.simple_list_item_checked,
-                    mService.getResults().getChannels());
+                    allChannels);
 
 
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    CheckedTextView checkView = (CheckedTextView) view;
+                    ChannelNumber channel = (ChannelNumber) allChannels.get(position);
+                    mService.setChannelSelection(channel, checkView.isChecked());
+
+                }
+            });
             adapter.notifyDataSetChanged();
+
+            ListIterator<ChannelNumber> iterator = allChannels.listIterator();
+            while (iterator.hasNext()) {
+                int index = iterator.nextIndex();
+                ChannelNumber channel = iterator.next();
+                if (mService.getUserChannels().contains(channel)) {
+                    listView.setItemChecked(index, true);
+                }
+            }
         }
 
         @Override
@@ -89,14 +116,13 @@ public class ChannelPickerActivity extends ActionBarActivity {
 
         listView = (ListView) findViewById(R.id.channel_picker_list_view);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckedTextView check = (CheckedTextView)view;
-                Log.d(TAG, "item clicked "+position);
-                //mService.setChannelSelection(position, check.isChecked());
-            }
-        });
+
+
+        for (ChannelNumber channel : ChannelNumber.values()) {
+            allChannels.add(channel);
+        }
+
+
 
     }
 
