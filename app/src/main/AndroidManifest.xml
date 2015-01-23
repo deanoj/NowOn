@@ -32,8 +32,6 @@
                 android:value="com.deanoj.nowon.MainActivity" />
         </activity>
 
-        <service android:name="com.deanoj.nowon.service.NowService" />
-
     </application>
 
 </manifest>

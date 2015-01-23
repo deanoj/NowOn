@@ -9,4 +9,8 @@
     <string name="title_activity_channel">ChannelActivity</string>
     <string name="title_activity_channel_picker">Choose channels</string>
 
+    <string name="lorem_short">Lorem ipsum dolor</string>
+    <string name="lorem_medium">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="lorem_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas laoreet, mi quis lobortis aliquam, tortor nibh sodales felis, a mattis mi lacus ac lectus.</string>
+
 </resources>

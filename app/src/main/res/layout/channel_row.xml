@@ -2,24 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/abc_control_padding_material"
+    android:paddingBottom="@dimen/abc_control_padding_material">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/ChannelFont"
         android:id="@+id/channel"
-        android:text="title"
-        android:textSize="@dimen/abc_text_size_large_material" />
+        android:text="@string/lorem_short"
+       />
 
     <TextView
+        style="@style/TvListingTitleFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/title"
-        android:text="title"
-        android:textSize="@dimen/abc_text_size_large_material"
+        android:text="@string/lorem_medium"
         android:paddingEnd="10sp"
         android:paddingRight="10sp"
-        android:textColor="@android:color/black" />
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +30,6 @@
         android:textSize="@dimen/abc_text_size_medium_material"
         android:paddingEnd="10sp"
         android:paddingRight="10sp" />
-
 
 
 </LinearLayout>
