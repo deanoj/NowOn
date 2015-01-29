@@ -22,6 +22,7 @@ import com.deanoj.nowon.data.adapter.ChannelAdapter;
 import com.deanoj.nowon.data.results.Channel;
 import com.deanoj.nowon.net.NetworkSingleton;
 import com.deanoj.nowon.ui.TimePickerFragment;
+import com.deanoj.nowon.ui.DatePickerFragment;
 import com.deanoj.nowon.util.RequestHelper;
 import com.deanoj.nowon.util.ResponseParser;
 
@@ -33,7 +34,8 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity implements TimePickerFragment.MyTimePickerListener {
+public class MainActivity extends ActionBarActivity implements TimePickerFragment.MyTimePickerListener,
+DatePickerFragment.MyDatePickerListener {
 
     private static final String TAG = "MainActivity";
     private static final String GITHUB_URL = "https://raw.githubusercontent.com/deanoj/deanoj.github.io/master/assets/tv.txt";
@@ -120,6 +122,10 @@ public class MainActivity extends ActionBarActivity implements TimePickerFragmen
                 return true;
             case R.id.action_time:
                 showTimePickerDialog();
+                return true;
+            case R.id.action_date:
+                showDatePickerDialog();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -128,6 +134,11 @@ public class MainActivity extends ActionBarActivity implements TimePickerFragmen
     public void showTimePickerDialog() {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    public void showDatePickerDialog() {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 
     private void showSettings() {
@@ -194,7 +205,7 @@ public class MainActivity extends ActionBarActivity implements TimePickerFragmen
     {
         Uri.Builder builder = new Uri.Builder();
         String startDate = RequestHelper.getDateStringHour(parser.getTime());
-        Log.d(TAG, startDate);
+        Log.d(TAG, "start date: " + startDate);
         builder.scheme("http")
                 .authority("www.radiotimes.com")
                 .appendPath("rt-service")

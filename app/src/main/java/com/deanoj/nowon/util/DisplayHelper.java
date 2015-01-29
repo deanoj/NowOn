@@ -1,5 +1,7 @@
 package com.deanoj.nowon.util;
 
+import android.text.Html;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,5 +31,9 @@ public class DisplayHelper {
         sb.append(" - ");
         sb.append(df.format(endTime));
         return sb.toString();
+    }
+
+    public static String cleanHtml(String html) {
+        return Html.fromHtml(html).toString();
     }
 }

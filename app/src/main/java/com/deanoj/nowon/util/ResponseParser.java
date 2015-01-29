@@ -76,6 +76,13 @@ public class ResponseParser {
 
     }
 
+    public void setStartDate(int year, int month, int day) {
+        time.set(Calendar.DAY_OF_MONTH, day);
+        time.set(Calendar.MONTH, month);
+        time.set(Calendar.YEAR, year);
+
+    }
+
     public Calendar getTime() {
         return this.time;
     }

@@ -58,10 +58,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             }
             if (titleView != null && channel.getTvListings() != null) {
                 String title = channel.getTvListings().get(0).getTitle();
-                //SpannableString styledTitle = new SpannableString(Html.fromHtml(title).toString());
-                //styledTitle.setSpan(new ForegroundColorSpan(Color.RED), 0, 5, 0);
-                //styledTitle.setSpan(new RelativeSizeSpan(1.5f), 3, title.length() > 10 ? 10 : title.length(), 0);
-                titleView.setText(title);
+                titleView.setText(DisplayHelper.cleanHtml(title));
             }
 
 

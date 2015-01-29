@@ -34,4 +34,9 @@ public class DisplayHelperTest extends AndroidTestCase {
         Assert.assertEquals(01, calendar.get(Calendar.HOUR));
         Assert.assertEquals(40, calendar.get(Calendar.MINUTE));
     }
+
+    public void testCleanHtml() {
+
+        Assert.assertEquals("David Starkey's Magna Carta", DisplayHelper.cleanHtml("David Starkey&#39;s Magna Carta"));
+    }
 }
