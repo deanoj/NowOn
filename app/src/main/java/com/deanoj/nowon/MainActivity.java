@@ -1,5 +1,6 @@
 package com.deanoj.nowon;
 
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import com.deanoj.nowon.data.ChannelNumber;
 import com.deanoj.nowon.data.adapter.ChannelAdapter;
 import com.deanoj.nowon.data.results.Channel;
 import com.deanoj.nowon.net.NetworkSingleton;
+import com.deanoj.nowon.ui.TimePickerFragment;
 import com.deanoj.nowon.util.RequestHelper;
 import com.deanoj.nowon.util.ResponseParser;
 
@@ -31,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements TimePickerFragment.MyTimePickerListener {
 
     private static final String TAG = "MainActivity";
     private static final String GITHUB_URL = "https://raw.githubusercontent.com/deanoj/deanoj.github.io/master/assets/tv.txt";
@@ -110,20 +112,37 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            //case R.id.action_channel_picker:
-            //    showChannelPicker();
-            //    return true;
-            case R.id.action_settings:
+            case R.id.action_about:
+                showAbout();
                 return true;
+            case R.id.action_settings:
+                showSettings();
+                return true;
+            case R.id.action_time:
+                showTimePickerDialog();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    public void showTimePickerDialog() {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    private void showSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 
 
     private void showChannelPicker() {
         Intent intent = new Intent(this, ChannelPickerActivity.class);
+        startActivity(intent);
+    }
+
+    private void showAbout() {
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
@@ -174,18 +193,25 @@ public class MainActivity extends ActionBarActivity {
     public String getUrl()
     {
         Uri.Builder builder = new Uri.Builder();
+        String startDate = RequestHelper.getDateStringHour(parser.getTime());
+        Log.d(TAG, startDate);
         builder.scheme("http")
                 .authority("www.radiotimes.com")
                 .appendPath("rt-service")
                 .appendPath("schedule")
                 .appendPath("get")
-                .appendQueryParameter("startDate", RequestHelper.getDateStringHour())
+                .appendQueryParameter("startDate", startDate)
                 .appendQueryParameter("hours", "3")
                 .appendQueryParameter("totalWidthUnits", "720")
                 .appendQueryParameter("channels",
                         RequestHelper.getChannelQueryParameter(Arrays.asList(ChannelNumber.values())));
 
         return builder.build().toString();
+    }
+
+    public void updateResults() {
+        parser.getResults().clearAll();
+        doRequest();
     }
 
 }

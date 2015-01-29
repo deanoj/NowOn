@@ -4,13 +4,15 @@
     <string name="app_name">Now On</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_about">About NowOn</string>
     <string name="action_channel_picker">Pick Channels</string>
-
     <string name="title_activity_channel">ChannelActivity</string>
     <string name="title_activity_channel_picker">Choose channels</string>
-
     <string name="lorem_short">Lorem ipsum dolor</string>
     <string name="lorem_medium">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="lorem_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas laoreet, mi quis lobortis aliquam, tortor nibh sodales felis, a mattis mi lacus ac lectus.</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_about">AboutActivity</string>
 
 </resources>

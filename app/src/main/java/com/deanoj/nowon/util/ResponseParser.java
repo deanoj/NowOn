@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 /**
  * Created by deano on 01/01/15.
  */
@@ -21,6 +23,8 @@ public class ResponseParser {
     private boolean started = false;
 
     protected ResponseParser() {}
+
+    private final Calendar time = Calendar.getInstance();
 
     public static ResponseParser getInstance()
     {
@@ -60,4 +64,21 @@ public class ResponseParser {
     public boolean isStarted() {
         return started;
     }
+
+    public void setStartHour(int hour) {
+        time.set(Calendar.HOUR, hour);
+    }
+
+    public void setStartDate(Calendar calendar) {
+        time.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+        time.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+        time.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+
+    }
+
+    public Calendar getTime() {
+        return this.time;
+    }
+
+
 }

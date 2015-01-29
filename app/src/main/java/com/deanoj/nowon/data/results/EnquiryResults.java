@@ -27,4 +27,9 @@ public class EnquiryResults {
     public void setChannels(List<Channel> channels) {
         this.channels = channels;
     }
+
+    public void clearAll()
+    {
+        getChannels().clear();
+    }
 }
