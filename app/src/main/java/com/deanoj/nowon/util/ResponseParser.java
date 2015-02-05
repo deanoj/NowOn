@@ -87,5 +87,10 @@ public class ResponseParser {
         return this.time;
     }
 
+    public String[] getUserChannels() {
+
+        return null;
+    }
+
 
 }

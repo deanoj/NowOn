@@ -1,31 +1,35 @@
 package com.deanoj.nowon;
 
-import android.net.Uri;
-import android.preference.PreferenceFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.MultiSelectListPreference;
+import android.preference.PreferenceFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
+import com.android.volley.Response;
+import com.deanoj.nowon.data.ChannelNumber;
+import com.deanoj.nowon.util.ResponseParser;
 
 
 public class SettingsActivity extends ActionBarActivity {
 
     private static final String TAG = "SettingsActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.preference_container, new PrefsFragment()).commit();
+                .replace(R.id.preference_container, new PrefsFragment())
+                .commit();
 
     }
 
     public static class PrefsFragment extends PreferenceFragment {
+
+        ResponseParser parser;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,14 @@ public class SettingsActivity extends ActionBarActivity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
+            MultiSelectListPreference listPreference = (MultiSelectListPreference) getPreferenceManager()
+                    .findPreference(getString(R.string.id_user_channel_list));
+
+
+            listPreference.setEntries(ChannelNumber.getChannelTitlesAsArray());
+            listPreference.setEntryValues(ChannelNumber.getChannelValuesAsArray());
+
+            listPreference.setDefaultValue(ChannelNumber.getDefaultChannelValuesAsArray());
         }
     }
 

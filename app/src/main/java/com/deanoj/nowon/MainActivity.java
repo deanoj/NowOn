@@ -23,6 +23,7 @@ import com.deanoj.nowon.data.results.Channel;
 import com.deanoj.nowon.net.NetworkSingleton;
 import com.deanoj.nowon.ui.TimePickerFragment;
 import com.deanoj.nowon.ui.DatePickerFragment;
+import com.deanoj.nowon.util.RequestBuilder;
 import com.deanoj.nowon.util.RequestHelper;
 import com.deanoj.nowon.util.ResponseParser;
 
@@ -203,6 +204,10 @@ DatePickerFragment.MyDatePickerListener {
     // construct URL to query API
     public String getUrl()
     {
+        Log.d(TAG, "Getting URL");
+        RequestBuilder requestBuilder = RequestBuilder.getInstance(getApplicationContext());
+
+        Log.d(TAG, requestBuilder.toString());
         Uri.Builder builder = new Uri.Builder();
         String startDate = RequestHelper.getDateStringHour(parser.getTime());
         Log.d(TAG, "start date: " + startDate);
@@ -214,8 +219,7 @@ DatePickerFragment.MyDatePickerListener {
                 .appendQueryParameter("startDate", startDate)
                 .appendQueryParameter("hours", "3")
                 .appendQueryParameter("totalWidthUnits", "720")
-                .appendQueryParameter("channels",
-                        RequestHelper.getChannelQueryParameter(Arrays.asList(ChannelNumber.values())));
+                .appendQueryParameter("channels", requestBuilder.getUserChannelQueryString());
 
         return builder.build().toString();
     }

@@ -6,4 +6,9 @@
         android:summary="summary text"
         android:defaultValue="true" />
 
+    <MultiSelectListPreference
+        android:key="@string/id_user_channel_list"
+        android:title="Channels"
+        />
+
 </PreferenceScreen>

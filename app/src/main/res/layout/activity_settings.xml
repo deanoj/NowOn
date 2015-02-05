@@ -7,7 +7,6 @@
     tools:context="com.deanoj.nowon.SettingsActivity"
     >
 
-
     <FrameLayout
         android:id="@+id/preference_container"
         android:layout_width="match_parent"

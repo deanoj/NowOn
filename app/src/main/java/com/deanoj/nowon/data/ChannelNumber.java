@@ -90,4 +90,31 @@ public enum ChannelNumber {
     public String getIdAsString() {
         return String.valueOf(this.id);
     }
+
+    public static String[] getChannelTitlesAsArray() {
+        String[] titles = new String[ChannelNumber.values().length];
+        for (int i = 0; i < ChannelNumber.values().length; i++) {
+            titles[i] = ChannelNumber.values()[i].getTitle();
+        }
+        return titles;
+    }
+
+    public static String[] getChannelValuesAsArray() {
+        String[] values = new String[ChannelNumber.values().length];
+        for (int i = 0; i < ChannelNumber.values().length; i++) {
+            values[i] = ChannelNumber.values()[i].getIdAsString();
+        }
+        return values;
+    }
+
+    public static String[] getDefaultChannelValuesAsArray() {
+        String[] channels = new String[4];
+
+        channels[0] = BBC_ONE.getIdAsString();
+        channels[1] = BBC_TWO.getIdAsString();
+        channels[2] = ITV.getIdAsString();
+        channels[3] = CHANNEL_4.getIdAsString();
+
+        return channels;
+    }
 }
