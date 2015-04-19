@@ -1,5 +1,7 @@
 package com.deanoj.nowon.util;
 
+import android.util.Log;
+
 import com.deanoj.nowon.data.results.Channel;
 import com.deanoj.nowon.data.results.EnquiryResults;
 
@@ -13,6 +15,8 @@ import java.util.Calendar;
  * Created by deano on 01/01/15.
  */
 public class ResponseParser {
+
+    public static final String TAG = "ResponseParser";
 
     private static ResponseParser instance = null;
 
@@ -66,7 +70,8 @@ public class ResponseParser {
     }
 
     public void setStartHour(int hour) {
-        time.set(Calendar.HOUR, hour);
+        time.set(Calendar.HOUR_OF_DAY, hour);
+        Log.d(TAG, "Calendar set by hour to: " + time.toString());
     }
 
     public void setStartDate(Calendar calendar) {

@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.TimePicker;
 
 import com.deanoj.nowon.MainActivity;
@@ -15,6 +16,8 @@ import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
+
+    public static final String TAG = "TimePickerFragment";
 
     private MyTimePickerListener listener;
 
@@ -34,6 +37,8 @@ public class TimePickerFragment extends DialogFragment
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+        Log.d(TAG, "Set time: hour: " + hourOfDay + " : " + minute);
 
         ResponseParser parser = ResponseParser.getInstance();
 
