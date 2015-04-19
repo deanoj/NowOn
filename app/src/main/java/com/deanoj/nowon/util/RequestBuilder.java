@@ -3,12 +3,16 @@ package com.deanoj.nowon.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.deanoj.nowon.R;
 import com.deanoj.nowon.data.ChannelNumber;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +21,8 @@ import java.util.Set;
  * Created by deano on 31/01/15.
  */
 public class RequestBuilder {
+
+    private static final String TAG = "RequestBuilder";
 
     private static RequestBuilder instance;
 
@@ -43,10 +49,16 @@ public class RequestBuilder {
         );
 
         for (String channel : set) {
-
+            Log.d(TAG, "channel: " + channel + ":" + ChannelNumber.get(channel));
         }
 
-        return set.toArray(new String[set.size()]);
+        ArrayList<String> channels = new ArrayList<String>();
+        channels.addAll(set);
+
+        Collections.sort(channels, channelComparator);
+
+
+        return channels.toArray(new String[channels.size()]);
     }
 
     public String getUserChannelQueryString() {
@@ -60,4 +72,11 @@ public class RequestBuilder {
         }
         return sb.toString();
     }
+
+    private Comparator<String> channelComparator = new Comparator<String>() {
+        @Override
+        public int compare(String lhs, String rhs) {
+            return ChannelNumber.get(lhs).ordinal() - ChannelNumber.get(rhs).ordinal();
+        }
+    };
 }

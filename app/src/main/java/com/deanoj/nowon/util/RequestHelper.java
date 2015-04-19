@@ -32,4 +32,9 @@ public class RequestHelper {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         return df.format(calendar.getTime());
     }
+
+    public static String getHumanDateTimeString(Calendar calendar) {
+        SimpleDateFormat df = new SimpleDateFormat("E, d MMM yyyy. h:mma");
+        return df.format(calendar.getTime());
+    }
 }

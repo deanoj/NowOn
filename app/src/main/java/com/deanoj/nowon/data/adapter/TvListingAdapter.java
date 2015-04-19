@@ -54,6 +54,9 @@ public class TvListingAdapter extends ArrayAdapter<TvListing> {
             }
 
             if (description != null) {
+                if (listing.getDescription() == null || "null".equals(listing.getDescription())) {
+                    description.setText("No description available");
+                }
                 description.setText(Html.fromHtml(listing.getDescription()));
             }
 

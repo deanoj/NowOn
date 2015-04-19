@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -78,6 +79,8 @@ DatePickerFragment.MyDatePickerListener {
         Log.d(TAG, "oncreate");
 
         parser = ResponseParser.getInstance();
+
+        setListViewHeader();
 
         if (parser.getResults().getChannels().size() == 0) {
             doRequest();
@@ -167,7 +170,15 @@ DatePickerFragment.MyDatePickerListener {
             e.printStackTrace();
         }
 
+        setListViewHeader();
+
         adapter.notifyDataSetChanged();
+    }
+
+    private void setListViewHeader() {
+        TextView textView = (TextView) findViewById(R.id.channelsListViewHeader);
+        textView.setText(RequestHelper.getHumanDateTimeString(parser.getTime()));
+
     }
 
     private void doRequest() {
@@ -178,22 +189,21 @@ DatePickerFragment.MyDatePickerListener {
         progress.setMessage("Loading...");
         progress.show();
 
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener() {
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, "",
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(Object response) {
+                    public void onResponse(JSONObject response) {
                         Log.v(TAG, response.toString());
                         progress.dismiss();
                         parseResponse(response.toString());
 
                     }
-                }, new Response.ErrorListener() {
-
+                },
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        Log.e(TAG, "error");
                         progress.dismiss();
+                        Log.d(TAG, "Error.Response");
                     }
                 }
         );
@@ -221,7 +231,9 @@ DatePickerFragment.MyDatePickerListener {
                 .appendQueryParameter("totalWidthUnits", "720")
                 .appendQueryParameter("channels", requestBuilder.getUserChannelQueryString());
 
-        return builder.build().toString();
+        String url = builder.build().toString();
+
+        return url;
     }
 
     public void updateResults() {

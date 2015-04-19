@@ -1,5 +1,8 @@
 package com.deanoj.nowon.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by deano on 09/01/15.
  */
@@ -117,4 +120,19 @@ public enum ChannelNumber {
 
         return channels;
     }
+
+    private static final Map<Long, ChannelNumber> lookup = new HashMap<Long, ChannelNumber>();
+
+    static {
+        for (ChannelNumber cn : ChannelNumber.values()) {
+            lookup.put(Long.valueOf(cn.getId()), cn);
+        }
+    }
+
+    public static ChannelNumber get(String channelCode) {
+        String code = channelCode;
+        return lookup.get(Long.valueOf(channelCode));
+    }
+
+
 }
